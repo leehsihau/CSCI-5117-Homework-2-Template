@@ -1,4 +1,4 @@
-# CSCI 5117 Fall 2018 -- Module 1 Homework
+# CSCI 5117 Spring 2021 -- Module 1 Homework
 
 Instructions can be [found on canvas](https://canvas.umn.edu/courses/217951/pages/homework-1)
 

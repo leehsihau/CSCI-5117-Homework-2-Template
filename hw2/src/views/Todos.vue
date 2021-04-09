@@ -6,7 +6,10 @@
             <input v-model="todo" placeholder="To-do">
             <button type="submit">Add To-do</button>
         </form>
-        <div v-for="(item, index) in filteredTodos" :key="index"><router-link :to="{path: '/todo/' + item.id }"><Todo :todo="item" style="white-space: nowrap; overflow: hidden"></Todo></router-link></div>
+        <div v-for="(item, index) in filteredTodos" :key="index">
+            <router-link :to="{path: '/todo/' + item.id }">
+            <Todo :userId="user.uid" :todo="item" style="white-space: nowrap; overflow: hidden"/>
+                </router-link></div>
         <br/>
         <router-link class="toggle" v-if="!done" to="/done">Show Finished Items</router-link>
         <router-link class="toggle" v-else to="/todos">Show Unfinished Items</router-link>
@@ -33,7 +36,6 @@
                 type: Boolean,
                 default: false
             },
-            userId: String
         },
         computed: {
             filteredTodos: function() {

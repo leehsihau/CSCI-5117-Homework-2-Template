@@ -25,6 +25,7 @@
         },
         props: {
             todo: Object,
+            userId: String
         },
         beforeCreate: function() {
             if (this.$route.params.id) {
@@ -33,6 +34,7 @@
                     if (!user) {
                         this.$router.push("/")
                     } else {
+                        console.log("rnm beforeCreate: "+this.user);
                         this.$bind('todo', db.collection('users').doc(this.user.uid).collection('todos').doc(this.$route.params.id));
                     }
                 })
@@ -41,10 +43,22 @@
         methods: {
             markAsDone(id) {
                 let done = true;
-                db.collection('users').doc(this.user.uid).collection('todos').doc(id).update({done});
+                let placeholder=undefined;
+                if(this.userId==undefined){
+                    placeholder=this.user.uid;
+                }else{
+                    placeholder=this.userId;
+                }
+                db.collection('users').doc(placeholder).collection('todos').doc(id).update({done});
             },
             updateTodo(todo) {
-                db.collection('users').doc(this.user.uid).collection('todos').doc(todo.id).update(todo);
+                let placeholder=undefined;
+                if(this.userId==undefined){
+                    placeholder=this.user.uid;
+                }else{
+                    placeholder=this.userId;
+                }
+                db.collection('users').doc(placeholder).collection('todos').doc(todo.id).update(todo);
             },
         }
     }

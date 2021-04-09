@@ -31,7 +31,7 @@
                 auth.onAuthStateChanged(user => {
                     this.user = user;
                     if (!user) {
-                        this.$router.push("")
+                        this.$router.push("/")
                     } else {
                         this.$bind('todo', db.collection('users').doc(this.user.uid).collection('todos').doc(this.$route.params.id));
                     }

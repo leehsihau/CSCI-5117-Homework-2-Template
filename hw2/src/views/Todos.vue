@@ -33,6 +33,7 @@
                 type: Boolean,
                 default: false
             },
+            userId: String
         },
         computed: {
             filteredTodos: function() {
@@ -43,7 +44,7 @@
             auth.onAuthStateChanged(user => {
                 this.user = user;
                 if (!user) {
-                    this.$router.push("")
+                    this.$router.push("/")
                 } else {
                     this.$bind('todos', db.collection('users').doc(this.user.uid).collection('todos').orderBy('createdAt', 'desc'));
                 }

@@ -1,17 +1,13 @@
 <template>
     <div class="auth">
 
-        <template v-if="!user">
+        <div v-if="!user">
             <a href @click.prevent="signInWithGoogle">Sign in with Google</a>
-        </template>
+        </div>
 
-        <template v-if="user">
-
-            <!--<img :src="user.photoURL" alt="avatar" style="width: 30px; height: 30px; border-radius: 50%;">-->
+        <div v-if="user">
             <a href @click.prevent="signOut">Sign Out</a>
-        </template>
-
-        <!-- <pre>{{ user }}</pre> -->
+        </div>
     </div>
 </template>
 
@@ -24,10 +20,8 @@
                 user: null
             };
         },
-        // TODO: look at https://savvyapps.com/blog/definitive-guide-building-web-app-vuejs-firebase
         beforeCreate: function() {
             auth.onAuthStateChanged(user => {
-                // console.log("user state:", user);
                 if (user) {
                     this.user = user;
                 }

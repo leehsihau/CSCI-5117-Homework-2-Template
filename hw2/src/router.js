@@ -5,6 +5,7 @@ import Splash from './views/Splash.vue'
 import Todos from './views/Todos.vue'
 import Todo from './views/Todo.vue'
 import NotFound from './views/NotFound.vue'
+import TodosCat from './views/TodosCat.vue'
 
 Vue.use(Router)
 
@@ -23,9 +24,22 @@ export default new Router({
             component: Todos,
         },
         {
+            path: '/todos/:category',
+            name: 'TodosCat',
+            component: TodosCat,
+        },
+        {
             path: '/done',
             name: 'Done',
             component: Todos,
+            props: {
+                done: true,
+            }
+        },
+        {
+            path: '/done/:category',
+            name: 'Done',
+            component: TodosCat,
             props: {
                 done: true
             }

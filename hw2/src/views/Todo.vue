@@ -1,4 +1,5 @@
 <template>
+    
     <div class="todo">
         <div v-if="todo" class="box">
             {{ todo.todo }}
@@ -11,6 +12,7 @@
             <input v-model="todo.todo">
             <button type="submit">Update To-do</button>
         </form>
+
     </div>
 </template>
 
@@ -25,7 +27,8 @@
         },
         props: {
             todo: Object,
-            userId: String
+            userId: String, 
+            category: String
         },
         beforeCreate: function() {
             if (this.$route.params.id) {
@@ -40,6 +43,7 @@
                 })
             }
         },
+       
         methods: {
             markAsDone(id) {
                 let done = true;
@@ -49,7 +53,10 @@
                 }else{
                     placeholder=this.userId;
                 }
+                console.log("category: "+this.category);
                 db.collection('users').doc(placeholder).collection('todos').doc(id).update({done});
+                db.collection('users').doc(placeholder).collection('todosCat').doc(this.category).collection(this.category).doc(id).update({done});
+
             },
             updateTodo(todo) {
                 let placeholder=undefined;
@@ -59,7 +66,12 @@
                     placeholder=this.userId;
                 }
                 db.collection('users').doc(placeholder).collection('todos').doc(todo.id).update(todo);
+                db.collection('users').doc(placeholder).collection('todosCat').doc(this.category).collection(this.category).doc(todo.id).update(todo);
+
             },
+        },
+        computed: {
+                
         }
     }
 </script>

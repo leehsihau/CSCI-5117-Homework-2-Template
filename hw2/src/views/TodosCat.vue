@@ -1,15 +1,22 @@
 <template>
     <div class="todos">
+        <router-link to="/todos">Go Home</router-link>
+
         <h1 v-if="!done">To-dos</h1>
         <h1 v-else>Finished To-dos</h1>
         <form v-if="!done" v-on:submit.prevent="addTodo(todo)">
             <input v-model="todo" placeholder="To-do">
             <button type="submit">Add To-do</button>
         </form>
+        <div v-if="todos.length==0">
+            <h3>category empty, add items to continue</h3>
+        </div>
+        <div v-else>
         <div v-for="(item, index) in filteredTodos" :key="index">
             <router-link :to="{path: '/todo/' + item.id }">
             <Todo :userId="user.uid" :todo="item" :category="$route.params.category" style="white-space: nowrap; overflow: hidden"/>
                 </router-link></div>
+        </div>
         <br/>
         <router-link class="toggle" v-if="!done" :to="{path: '/done/' + $route.params.category}">Show Finished Items</router-link>
         <router-link class="toggle" v-else :to="{path: '/todos/' + $route.params.category}">Show Unfinished Items</router-link>
@@ -40,6 +47,7 @@
         },
         computed: {
             filteredTodos: function() {
+                console.log(this.todos);
                 return this.todos.filter(i => i.done === this.done);
             }
         },
@@ -55,7 +63,8 @@
                 if (!user) {
                     this.$router.push("/")
                 } else {
-                    this.$bind('todos', db.collection('users').doc(this.user.uid).collection('todosCat').doc(this.$route.params.category).collection(this.$route.params.category).orderBy('createdAt', 'desc'));
+                    this.$bind('todos', db.collection('users').doc(this.user.uid).collection('todos').where('category', '==', this.$route.params.category));
+
                 }
             })
         },
@@ -63,26 +72,12 @@
             addTodo(todo) {
                 let createdAt = new Date();
                 let done = false;
-                let customId="";
                 let currentUid=this.user.uid;
                 console.log("uid1: "+currentUid);
-                let cate=this.$route.params.category;
-                db.collection('users').doc(currentUid).collection('todos').add({todo, createdAt, done}).then(function(docRef) {
-                    console.log("Document written with ID: ", docRef.id);
-                                    console.log("uid2: "+currentUid);
-
-                    customId=docRef.id;
-                }).then(()=>{
-                    console.log("in then: ", customId);
-                                    console.log("uid3: "+currentUid);
-
-                    db.collection('users').doc(currentUid).collection('todosCat').doc(cate).collection(cate).doc(customId).set({todo, createdAt, done});
-                });
-                
-            },
-            deleteTodo(id) {
-                db.collection('users').doc(this.user.uid).collection('todos').doc(id).delete();
-            },
+                let category=this.$route.params.category;
+                db.collection("users").doc(currentUid).collection("categories").doc(category).set({done: true, category: category}, {merge: true});
+                db.collection('users').doc(currentUid).collection('todos').add({todo, createdAt, done, category});
+            }
         },
     }
 </script>
